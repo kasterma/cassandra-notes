@@ -167,3 +167,18 @@ last write.
 read repair chance (used when read consistency level is less than ALL)
 
 nodetool repair, can sync all data in the cluster.  expensive
+
+## Internal Architecture
+
+write path
+  with partition key get the node(s) where to write
+  commit log: append only on disk
+  memtable: in memory, satisfying data model (i.e. sort)
+  flush the memtable to disk -> SSTable; then clean up commit log
+    SSTable is immutable, and has a partition index (and a summary index
+      (in memory) to work with the partition index efficiently)
+read path
+  MemTable, SSTables: read partitions relevant froem all and combine
+  there is a key cache that keeps a lookup table for partitions in memory
+  there is a bloom filter in memory to reduce number of SSTables we need to look at
+compaction
