@@ -96,3 +96,48 @@ equality (first) and range queries)
 range search is binary search followed by linear read
 
 ## distributed architecture
+
+bin/nodetool help
+	     info       node settings and stats
+	     status     node health and cluster info
+
+3k/5k transactions per second
+1/3 TB of data
+
+every node can act as coordinator
+
+ring: every nodes gets ranges of the partition values.
+
+joining the cluster
+states: joining, leaving, up, down
+
+driver helps with this; it is aware of which token ranges are assigned
+to which nodes.  Can more effecively send the data to the right node.
+
+scaling is near linear
+
+consistency level to determine how to deal with unreachable nodes; can
+continue reading and writing when there is a network partition, though
+then off course when the partition resolves it some data may get lost.
+
+Vnodes
+token assignment is not always an even spread
+each nodes get several token ranges to manage (these ranges are the
+vnodes)
+
+gossip: cluster metadata for all nodes
+heartbeat state
+  generation
+  version
+
+Application state
+  status
+  dc
+  rack
+  schema
+  load       disk pressure
+  severity   IO pressure
+  etc....
+
+Different Snitch implementations.  Helping determine where your data
+is.  For a node give a datacenter and a rack.
