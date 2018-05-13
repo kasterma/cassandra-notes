@@ -81,3 +81,18 @@ also for copying table
 TODO: DS 220 on data modeling
 
 ## Cassandra data model
+
+partition: grouping of data, set up partitioner to assign group to data
+first value in primary key is the partition key
+partitions are assigned to nodes
+
+primary key ((state), id)
+
+id is a clustering column
+
+when querying, always use the partition key; gives you data locality
+within the single server, can query on clustering columns (using
+equality (first) and range queries)
+range search is binary search followed by linear read
+
+## distributed architecture
