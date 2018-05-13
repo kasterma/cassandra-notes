@@ -141,3 +141,29 @@ Application state
 
 Different Snitch implementations.  Helping determine where your data
 is.  For a node give a datacenter and a rack.
+
+## Replication/Consistency
+
+RF _|_ topology strategy
+
+strategy: simple, network topology
+
+CAP: cassandra is AP
+consistency levels:
+  client chooses this on every read/write
+  ANY, ONE, QUORUM, LOCAL_QUORUM, EACH_QUORUM, ALL
+
+Hinted handoffs.  Failed writes; store the data to be written locally
+(the hint) on the coordinator until the node comes back up.
+
+consistency level: ANY sufficient to only write the hint
+
+store hints for three hours; can also be disabled.
+
+read-repair: when getting data from three nodes, only one gives data,
+the other two give digests.  If different, use timestamp to determine
+last write.
+
+read repair chance (used when read consistency level is less than ALL)
+
+nodetool repair, can sync all data in the cluster.  expensive
